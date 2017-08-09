@@ -1,6 +1,5 @@
 package books;
 
-import org.apache.commons.jcs.access.CacheAccess;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,11 +16,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.*;
 
-public class BookServiceTest {
+public class BookServiceSqliteTest {
     private Connection connection;
-    private CacheAccess<Integer, Book> cache;
 
     private Book bookFixture1 = new Book(
         1,
@@ -46,7 +43,6 @@ public class BookServiceTest {
     public void setUp() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:bookstore_test.db");
-        cache = mock(CacheAccess.class);
     }
 
     @After
@@ -58,36 +54,21 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookShouldRetrieveABookFromTheDatabaseOnACacheMiss() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getBookShouldRetrieveABook() throws ClassNotFoundException, SQLException, BookstoreException {
         loadFixtrue1();
-        BookService service = new BookService(connection, cache);
+        BookService service = new BookServiceSqlite(connection);
 
-        when(cache.get(1)).thenReturn(null);
         Book book = service.get(1);
 
         assertThat(book, equalTo(bookFixture1));
     }
 
     @Test
-    public void getBookShouldNotCallTheDatabaseForABookThatHasBeenCached() throws ClassNotFoundException, SQLException, BookstoreException {
-        Connection connection = mock(Connection.class);
-        BookService service = new BookService(connection, cache);
-
-        when(cache.get(1)).thenReturn(bookFixture1);
-        Book book = service.get(1);
-
-        verify(connection, never()).prepareStatement(any());
-        assertThat(book, equalTo(bookFixture1));
-    }
-
-    @Test
-    public void getAllBooksShouldRetrieveBooksFromTheDatabaseOnACacheMiss() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getAllBooksShouldRetrieveAListOfBooks() throws ClassNotFoundException, SQLException, BookstoreException {
         loadFixtrue1();
         loadFixtrue2();
-        BookService service = new BookService(connection, cache);
+        BookService service = new BookServiceSqlite(connection);
 
-        when(cache.get(1)).thenReturn(null);
-        when(cache.get(2)).thenReturn(null);
         List<Integer> book = service.getAll();
 
         assertThat(book.size(), equalTo(2));
@@ -96,27 +77,11 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getAllBooksShouldNotCallTheDatabaseForBooksThatAreCached() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void deleteBookShouldRemoveABook() throws SQLException, ClassNotFoundException, BookstoreException {
         loadFixtrue1();
-        loadFixtrue2();
-        BookService service = new BookService(connection, cache);
-
-        when(cache.get(1)).thenReturn(bookFixture1);
-        when(cache.get(2)).thenReturn(bookFixture2);
-        List<Integer> book = service.getAll();
-
-        assertThat(book.size(), equalTo(2));
-        assertThat(book.get(0), equalTo(1));
-        assertThat(book.get(1), equalTo(2));
-    }
-
-    @Test
-    public void deleteBookShouldRemoveABookFromTheDatabaseAndTheCache() throws SQLException, ClassNotFoundException, BookstoreException {
-        loadFixtrue1();
-        BookService service = new BookService(connection, cache);
+        BookService service = new BookServiceSqlite(connection);
 
         service.delete(1);
-        verify(cache).remove(1);
 
         thrown.expect(BookstoreException.class);
         thrown.expectMessage("Book Not Found");
@@ -124,13 +89,12 @@ public class BookServiceTest {
     }
 
     @Test
-    public void saveBookShouldUpdateTheBookInTheDatabaseToMatchTheGivenBookAndUpdateTheCache() throws SQLException, ClassNotFoundException, BookstoreException {
+    public void saveBookShouldUpdateTheBookToMatchTheGivenBook() throws SQLException, ClassNotFoundException, BookstoreException {
         loadFixtrue1();
-        BookService service = new BookService(connection, cache);
+        BookService service = new BookServiceSqlite(connection);
 
         Book newBook = new Book(1, "Foo", "Bar", Arrays.asList("Me"), Year.of(2017));
         service.save(newBook);
-        verify(cache).put(1, newBook);
 
         Book savedBook = service.get(1);
         assertThat(savedBook, equalTo(newBook));
