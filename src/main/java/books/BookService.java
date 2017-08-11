@@ -1,7 +1,6 @@
 package books;
 
 import org.apache.commons.jcs.access.CacheAccess;
-import org.apache.commons.jcs.access.exception.CacheException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -57,11 +56,7 @@ public class BookService {
                         Year.of(rs.getInt("publishDate"))
                     );
 
-                    try {
-                        cache.put(book.getId(), book);
-                    } catch (CacheException e) {
-                        // TODO: Log cache failure
-                    }
+                    cache.put(book.getId(), book);
                 } else {
                     throw new BookstoreException("Book Not Found");
                 }
@@ -79,11 +74,7 @@ public class BookService {
             deleteStmt.setInt(1, id);
             deleteStmt.executeUpdate();
 
-            try {
-                cache.remove(id);
-            } catch (CacheException e) {
-                // TODO: Log cache failure
-            }
+            cache.remove(id);
         } catch (SQLException e) {
             throw new BookstoreException(e);
         }
@@ -104,11 +95,7 @@ public class BookService {
 
             updateStmt.executeUpdate();
 
-            try {
-                cache.put(1, book);
-            } catch (CacheException e) {
-                // TODO: Log cache failure
-            }
+            cache.put(1, book);
         } catch (SQLException e) {
             throw new BookstoreException(e);
         }

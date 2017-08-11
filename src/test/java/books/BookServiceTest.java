@@ -58,7 +58,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookShouldRetrieveABookFromTheDatabaseOnACacheMiss() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getBookShouldRetrieveABookFromTheDatabaseOnACacheMiss() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookService(connection, cache);
 
@@ -69,7 +69,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookShouldNotCallTheDatabaseForABookThatHasBeenCached() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getBookShouldNotCallTheDatabaseForABookThatHasBeenCached() throws BookstoreException, ClassNotFoundException, SQLException {
         Connection connection = mock(Connection.class);
         BookService service = new BookService(connection, cache);
 
@@ -81,7 +81,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getAllBooksShouldRetrieveBooksFromTheDatabaseOnACacheMiss() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getAllBooksShouldRetrieveBooksFromTheDatabase() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         loadFixtrue2();
         BookService service = new BookService(connection, cache);
@@ -96,22 +96,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getAllBooksShouldNotCallTheDatabaseForBooksThatAreCached() throws ClassNotFoundException, SQLException, BookstoreException {
-        loadFixtrue1();
-        loadFixtrue2();
-        BookService service = new BookService(connection, cache);
-
-        when(cache.get(1)).thenReturn(bookFixture1);
-        when(cache.get(2)).thenReturn(bookFixture2);
-        List<Integer> book = service.getAll();
-
-        assertThat(book.size(), equalTo(2));
-        assertThat(book.get(0), equalTo(1));
-        assertThat(book.get(1), equalTo(2));
-    }
-
-    @Test
-    public void deleteBookShouldRemoveABookFromTheDatabaseAndTheCache() throws SQLException, ClassNotFoundException, BookstoreException {
+    public void deleteBookShouldRemoveABookFromTheDatabaseAndTheCache() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookService(connection, cache);
 
@@ -124,7 +109,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void saveBookShouldUpdateTheBookInTheDatabaseToMatchTheGivenBookAndUpdateTheCache() throws SQLException, ClassNotFoundException, BookstoreException {
+    public void saveBookShouldUpdateTheBookInTheDatabaseToMatchTheGivenBookAndUpdateTheCache() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookService(connection, cache);
 
