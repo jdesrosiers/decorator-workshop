@@ -54,7 +54,7 @@ public class BookServiceSqliteTest {
     }
 
     @Test
-    public void getBookShouldRetrieveABook() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getBookShouldRetrieveABook() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookServiceSqlite(connection);
 
@@ -64,7 +64,7 @@ public class BookServiceSqliteTest {
     }
 
     @Test
-    public void getAllBooksShouldRetrieveAListOfBooks() throws ClassNotFoundException, SQLException, BookstoreException {
+    public void getAllBooksShouldRetrieveAListOfBooks() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         loadFixtrue2();
         BookService service = new BookServiceSqlite(connection);
@@ -77,7 +77,7 @@ public class BookServiceSqliteTest {
     }
 
     @Test
-    public void deleteBookShouldRemoveABook() throws SQLException, ClassNotFoundException, BookstoreException {
+    public void deleteBookShouldRemoveABook() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookServiceSqlite(connection);
 
@@ -89,7 +89,7 @@ public class BookServiceSqliteTest {
     }
 
     @Test
-    public void saveBookShouldUpdateTheBookToMatchTheGivenBook() throws SQLException, ClassNotFoundException, BookstoreException {
+    public void saveBookShouldUpdateTheBookToMatchTheGivenBook() throws BookstoreException, ClassNotFoundException, SQLException {
         loadFixtrue1();
         BookService service = new BookServiceSqlite(connection);
 

@@ -12,12 +12,12 @@ public class BookServiceFactory {
         try {
             Class.forName("org.sqlite.JDBC");
             Connection connection = DriverManager.getConnection("jdbc:sqlite:bookstore.db");
-            BookService serviceData = new BookServiceSqlite(connection);
+            BookService dataService = new BookServiceSqlite(connection);
 
             CacheAccess<Integer, Book> cache = JCS.getInstance("bookCache");
-            BookService service = new BookServiceCache(serviceData, cache);
+            BookService cacheService = new BookServiceCache(dataService, cache);
 
-            return service;
+            return cacheService;
         } catch (ClassNotFoundException e) {
             throw new BookstoreException(e);
         } catch (SQLException e) {
