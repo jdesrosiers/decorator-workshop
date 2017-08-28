@@ -47,13 +47,12 @@ public class BookServiceLoggerTest {
 
     @Test
     public void getAllBooksShouldLogTheRequestAndCallTheParent() throws BookstoreException {
-        when(parent.getAll()).thenReturn(Arrays.asList(1, 2));
-        List<Integer> book = service.getAll();
+        List<Integer> expectedBookList = Arrays.asList(1, 2);
+        when(parent.getAll()).thenReturn(expectedBookList);
+        List<Integer> bookList = service.getAll();
 
         verify(logger).info(anyString());
-        assertThat(book.size(), equalTo(2));
-        assertThat(book.get(0), equalTo(1));
-        assertThat(book.get(1), equalTo(2));
+        assertThat(bookList, equalTo(expectedBookList));
     }
 
     @Test
