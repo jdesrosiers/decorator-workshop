@@ -27,13 +27,6 @@ public class BookServiceSqliteTest {
         Arrays.asList("Robert C. Martin"),
         Year.of(2003)
     );
-    private Book bookFixture2 = new Book(
-        2,
-        "Design Patterns",
-        "Elements of Reusable Object-Oriented Software",
-        Arrays.asList("Erich Gamma", "Richard Helm", "Ralph Johnson", "John Vlissides"),
-        Year.of(1995)
-    );
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
