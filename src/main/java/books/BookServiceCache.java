@@ -1,7 +1,6 @@
 package books;
 
 import org.apache.commons.jcs.access.CacheAccess;
-import org.apache.commons.jcs.access.exception.CacheException;
 
 import java.util.List;
 
@@ -25,11 +24,7 @@ public class BookServiceCache implements BookService {
 
         if (book == null) {
             book = service.get(id);
-            try {
-                cache.put(id, book);
-            } catch (CacheException e) {
-                // TODO: Log cache failure
-            }
+            cache.put(id, book);
         }
 
         return book;
@@ -38,20 +33,12 @@ public class BookServiceCache implements BookService {
     @Override
     public void delete(int id) throws BookstoreException {
         service.delete(id);
-        try {
-            cache.remove(id);
-        } catch (CacheException e) {
-            // TODO: Log cache failure
-        }
+        cache.remove(id);
     }
 
     @Override
     public void save(Book book) throws BookstoreException {
         service.save(book);
-        try {
-            cache.put(book.getId(), book);
-        } catch (CacheException e) {
-            // TODO: Log cache failure
-        }
+        cache.put(book.getId(), book);
     }
 }
