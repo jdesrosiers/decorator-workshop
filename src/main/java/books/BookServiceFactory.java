@@ -16,15 +16,15 @@ public class BookServiceFactory {
             BookService dataService = new BookServiceSqlite(connection);
 
             Logger dataLogger = Logger.getLogger("BookServiceSqlite");
-            BookService loggedDataService = new BookServiceLogger(dataService, dataLogger);
+            BookService profiledDataService = new BookServiceProfiler(dataService, dataLogger);
 
             CacheAccess<Integer, Book> cache = JCS.getInstance("bookCache");
-            BookService cachedLoggedDataService = new BookServiceCache(loggedDataService, cache);
+            BookService cachedProfiledDataService = new BookServiceCache(profiledDataService, cache);
 
             Logger cacheLogger = Logger.getLogger("BookServiceCache");
-            BookService loggedCachedLoggedDataService = new BookServiceLogger(cachedLoggedDataService, cacheLogger);
+            BookService profiledCachedProfiledDataService = new BookServiceProfiler(cachedProfiledDataService, cacheLogger);
 
-            return loggedCachedLoggedDataService;
+            return profiledCachedProfiledDataService;
         } catch (ClassNotFoundException e) {
             throw new BookstoreException(e);
         } catch (SQLException e) {

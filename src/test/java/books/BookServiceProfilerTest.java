@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class BookServiceLoggerTest {
+public class BookServiceProfilerTest {
     private Logger logger;
     private BookService parent;
     private BookService service;
@@ -32,7 +32,7 @@ public class BookServiceLoggerTest {
     public void setUp() {
         parent = mock(BookService.class);
         logger = mock(Logger.class);
-        service = new BookServiceLogger(parent, logger);
+        service = new BookServiceProfiler(parent, logger);
     }
 
     @Test
