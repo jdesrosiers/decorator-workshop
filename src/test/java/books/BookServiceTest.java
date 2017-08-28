@@ -86,8 +86,6 @@ public class BookServiceTest {
         loadFixtrue2();
         BookService service = new BookService(connection, cache);
 
-        when(cache.get(1)).thenReturn(null);
-        when(cache.get(2)).thenReturn(null);
         List<Integer> book = service.getAll();
 
         assertThat(book.size(), equalTo(2));
