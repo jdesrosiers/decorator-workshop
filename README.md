@@ -4,9 +4,9 @@ This application uses the classic computer science example of a bookstore.  It i
 
 Your Mission
 ------------
-1) Refactor the implmentation to split the database and cache responsiblities into two classes and compose them using the decorator pattern.  (Decorate the database decorator with the cache decorator)
-2) Add a logging decorator to the `BookService` that logs service calls to the conosle.
-3) Decorate both the cache decorator and the database decorator with your logging decorator and then decorate the logging-database decorator with the logging-cache decorator.
+1) Refactor the implmentation to split the database and cache responsiblities into two classes and compose them using the decorator pattern.  (Decorate the database class with the cache class)
+2) Add a profiler decorator to the `BookService` that logs how long service calls take to complete.
+3) Compose your decorators so that both the database class and cache class have profiler decorators.  If you did part 1 and 2 correctly you should only have to change the `BookServiceFactory` class.
 
 Dependencies
 ------------
@@ -20,7 +20,7 @@ The project depends on the following projects.  You shouldn't have to do anythin
 
 Initialize the Application
 --------------------------
-Create an Sqlite database with some sample data.  Create another Sqlite database to use for testing.
+Before you can do anything, you will need to run this script to create an Sqlite database with some sample data and second Sqlite database that will be used for testing.
 
 ```bash
 mvn compile exec:java@init
